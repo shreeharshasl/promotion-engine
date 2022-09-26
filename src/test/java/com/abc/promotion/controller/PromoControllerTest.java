@@ -3,12 +3,16 @@ package com.abc.promotion.controller;
 import com.abc.promotion.constants.PromoTypeConstants;
 import com.abc.promotion.domain.PromoItem;
 import com.abc.promotion.domain.Promotion;
+import com.abc.promotion.service.PromoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,10 +28,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 class PromoControllerTest {
+    @MockBean
+    private PromoService promoService;
 
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeEach
+    public void init(){
+        Mockito.when(promoService.addPromotion(Mockito.any())).thenReturn("Success");
+    }
     @Test
     public void putPromotion() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders

@@ -13,7 +13,7 @@ public class PromoServiceImpl implements PromoService{
      */
     @Override
     public String addPromotion(Promotion promotion) {
-        return null;
+        return "Success";
     }
 
     /**

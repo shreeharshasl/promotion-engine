@@ -1,5 +1,6 @@
 package com.abc.promotion.controller;
 
+import com.abc.promotion.constants.ValidationConstants;
 import com.abc.promotion.domain.Promotion;
 import com.abc.promotion.service.PromoService;
 import com.abc.promotion.validator.PromoControllerValidator;
@@ -24,6 +25,10 @@ public class PromoController {
 
     @PutMapping
     public ResponseEntity<String> addPromotion(@Valid @RequestBody Promotion promotion){
-        return ResponseEntity.ok("Success");
+        if(ValidationConstants.STATUS_INVALID
+                .equalsIgnoreCase(promoControllerValidator.validatePromoRequest(promotion)))
+            return ResponseEntity.badRequest().body("INVALID REQUEST");
+        String status = promoService.addPromotion(promotion);
+        return ResponseEntity.ok(status);
     }
 }
