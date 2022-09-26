@@ -1,5 +1,6 @@
 package com.abc.promotion.controller;
 
+import com.abc.promotion.constants.PromoTypeConstants;
 import com.abc.promotion.domain.PromoItem;
 import com.abc.promotion.domain.Promotion;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,13 +33,56 @@ class PromoControllerTest {
                 .put("/promotion")
                 .content(asJsonString(Promotion.builder()
                         .promoId("1")
-                        .promoType("SAME")
+                        .promoType(PromoTypeConstants.SAME_TYPE)
                         .promoAmount(20.0)
                         .promoItemList(Arrays.asList(PromoItem.builder().skuId("A").count(3).build()))
                         .build()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void putPromotion_BadRequest_EmptyPromoType() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/promotion")
+                        .content(asJsonString(Promotion.builder()
+                                .promoId("1")
+                                .promoAmount(20.0)
+                                .promoItemList(Arrays.asList(PromoItem.builder().skuId("A").count(3).build()))
+                                .build()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void putPromotion_BadRequest_EmptyPromoAmount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/promotion")
+                        .content(asJsonString(Promotion.builder()
+                                .promoId("1")
+                                .promoType(PromoTypeConstants.SAME_TYPE)
+                                .promoItemList(Arrays.asList(PromoItem.builder().skuId("A").count(3).build()))
+                                .build()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void putPromotion_BadRequest_EmptyPromoItem() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/promotion")
+                        .content(asJsonString(Promotion.builder()
+                                .promoId("1")
+                                .promoType(PromoTypeConstants.SAME_TYPE)
+                                .promoAmount(20.0)
+                                .promoItemList(new ArrayList<>())
+                                .build()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
     public static String asJsonString(final Object obj){
         try {
