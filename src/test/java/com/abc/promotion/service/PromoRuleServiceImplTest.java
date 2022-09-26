@@ -55,8 +55,8 @@ class PromoRuleServiceImplTest {
         PromoItem pi1= PromoItem.builder().skuId("C").count(1).build();
         PromoItem pi2= PromoItem.builder().skuId("D").count(1).build();
         Promotion p3 = Promotion.builder()
-                .promoId("2")
-                .promoType(PromoTypeConstants.SAME_TYPE)
+                .promoId("3")
+                .promoType(PromoTypeConstants.MIXED_TYPE)
                 .promoAmount(45.0)
                 .promoItemList(Arrays.asList(pi1,pi2))
                 .build();
@@ -93,6 +93,31 @@ class PromoRuleServiceImplTest {
         List<Item> cartLineItems = prepareTestDataForScenario2();
         Double actualValue = promoRuleService.applyPromo(cartLineItems);
         Assertions.assertEquals(370,actualValue);
+    }
+
+    @Test
+    /**
+     * Scenario C
+     * 3 * A     130
+     * 5 * B     45 + 45 + 1 * 30
+     * 1 * C     -
+     * 1 * D     30
+     * ======
+     * Total     280
+     */
+    void applyPromo_ScenarioC() {
+        List<Item> cartLineItems = prepareTestDataForScenario3();
+        Double actualValue = promoRuleService.applyPromo(cartLineItems);
+        Assertions.assertEquals(370,actualValue);
+    }
+
+    private List<Item> prepareTestDataForScenario3() {
+        List<Item> cartLineItems = new ArrayList<>();
+        cartLineItems.add(Item.builder().skuId("A").unitPrice(50.0).qty(3).build());
+        cartLineItems.add(Item.builder().skuId("B").unitPrice(30.0).qty(5).build());
+        cartLineItems.add(Item.builder().skuId("C").unitPrice(20.0).qty(1).build());
+        cartLineItems.add(Item.builder().skuId("D").unitPrice(15.0).qty(1).build());
+        return  cartLineItems;
     }
 
     private List<Item> prepareTestDataForScenario2() {

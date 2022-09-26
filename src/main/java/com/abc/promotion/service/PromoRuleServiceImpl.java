@@ -44,10 +44,20 @@ public class PromoRuleServiceImpl implements PromoRuleService{
     }
 
     private Double applyMixedTypePromo(Promotion promotion, List<Item> cartLineItems) {
-        return 0.0;
+        Double amount = 0.0;
+
+        return amount;
     }
 
     private Double applySameTypePromo(Promotion promotion, List<Item> cartLineItems) {
-        return 0.0;
+        Double amount = 0.0;
+        String skuId = promotion.getPromoItemList().get(0).getSkuId();
+        for (Item item: cartLineItems) {
+            if(item.getSkuId().equalsIgnoreCase(skuId)){
+                amount+=(item.getQty()/promotion.getPromoItemList().get(0).getCount())*promotion.getPromoAmount();
+                item.setQty(item.getQty()%promotion.getPromoItemList().get(0).getCount());
+            }
+        }
+        return amount;
     }
 }
