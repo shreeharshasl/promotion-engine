@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,6 +80,24 @@ class PromoControllerTest {
                                 .promoType(PromoTypeConstants.SAME_TYPE)
                                 .promoAmount(20.0)
                                 .promoItemList(new ArrayList<>())
+                                .build()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void putPromotion_BadRequest_Validator_Failure() throws Exception {
+        List<PromoItem> promoItems = new ArrayList<>();
+        promoItems.add(PromoItem.builder().skuId("A").count(1).build());
+        promoItems.add(PromoItem.builder().skuId("B").count(1).build());
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/promotion")
+                        .content(asJsonString(Promotion.builder()
+                                .promoId("1")
+                                .promoType(PromoTypeConstants.SAME_TYPE)
+                                .promoAmount(20.0)
+                                .promoItemList(promoItems)
                                 .build()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
