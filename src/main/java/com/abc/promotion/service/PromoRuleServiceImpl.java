@@ -1,6 +1,8 @@
 package com.abc.promotion.service;
 
+import com.abc.promotion.constants.PromoTypeConstants;
 import com.abc.promotion.domain.Item;
+import com.abc.promotion.domain.Promotion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,6 +25,29 @@ public class PromoRuleServiceImpl implements PromoRuleService{
      */
     @Override
     public Double applyPromo(List<Item> cartLineItems) {
-        return null;
+        log.debug("Applying promo for cartLineItems:{}",cartLineItems);
+        Double amount = 0.0;
+        List<Promotion> listOfPromotions
+                = (List<Promotion>) promotionContainer.values()
+                .stream().collect(Collectors.toList());
+        for (Promotion promotion: listOfPromotions) {
+            switch (promotion.getPromoType()){
+                case PromoTypeConstants.SAME_TYPE: amount += applySameTypePromo(promotion, cartLineItems);
+                    break;
+                case PromoTypeConstants.MIXED_TYPE: amount += applyMixedTypePromo(promotion, cartLineItems);
+                    break;
+            }
+        }
+        amount+=cartLineItems.stream().mapToDouble(item->item.getQty()*item.getUnitPrice()).sum();
+
+        return amount;
+    }
+
+    private Double applyMixedTypePromo(Promotion promotion, List<Item> cartLineItems) {
+        return 0.0;
+    }
+
+    private Double applySameTypePromo(Promotion promotion, List<Item> cartLineItems) {
+        return 0.0;
     }
 }

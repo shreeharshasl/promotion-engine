@@ -74,10 +74,33 @@ class PromoRuleServiceImplTest {
      * ======
      * Total     100
      */
-    void applyPromo() {
+    void applyPromo_ScenarioA() {
         List<Item> cartLineItems = prepareTestDataForScenario1();
         Double actualValue = promoRuleService.applyPromo(cartLineItems);
         Assertions.assertEquals(100,actualValue);
+    }
+
+    @Test
+    /**
+     * Scenario B
+     * 5 * A     130 + 2*50
+     * 5 * B     45 + 45 + 30
+     * 1 * C     20
+     * ======
+     * Total     370
+     */
+    void applyPromo_ScenarioB() {
+        List<Item> cartLineItems = prepareTestDataForScenario2();
+        Double actualValue = promoRuleService.applyPromo(cartLineItems);
+        Assertions.assertEquals(370,actualValue);
+    }
+
+    private List<Item> prepareTestDataForScenario2() {
+        List<Item> cartLineItems = new ArrayList<>();
+        cartLineItems.add(Item.builder().skuId("A").unitPrice(50.0).qty(5).build());
+        cartLineItems.add(Item.builder().skuId("B").unitPrice(30.0).qty(5).build());
+        cartLineItems.add(Item.builder().skuId("C").unitPrice(20.0).qty(1).build());
+        return  cartLineItems;
     }
 
     private List<Item> prepareTestDataForScenario1() {
