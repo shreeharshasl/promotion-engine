@@ -43,3 +43,21 @@ Scenario C
 1 * D 30
 ======
 Total 280
+
+
+APP DETAILS:
+Promo
+    Endpoint: http://localhost:8080/promotion
+    HTTP METHOD: PUT 
+    Request Sample: {
+            "promoId": "2",
+            "promoType": "SAME",
+            "priority": 0,
+            "promoAmount": 20,
+            "promoItemList": [
+                    {
+                    "skuId": "B",
+                    "count": 2
+                    }
+                ]
+            }

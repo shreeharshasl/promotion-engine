@@ -4,6 +4,7 @@ import com.abc.promotion.constants.ValidationConstants;
 import com.abc.promotion.domain.Promotion;
 import com.abc.promotion.service.PromoService;
 import com.abc.promotion.validator.PromoControllerValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/promotion")
 public class PromoController {
