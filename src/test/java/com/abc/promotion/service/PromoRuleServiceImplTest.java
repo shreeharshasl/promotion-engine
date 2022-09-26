@@ -57,7 +57,7 @@ class PromoRuleServiceImplTest {
         Promotion p3 = Promotion.builder()
                 .promoId("3")
                 .promoType(PromoTypeConstants.MIXED_TYPE)
-                .promoAmount(45.0)
+                .promoAmount(30.0)
                 .promoItemList(Arrays.asList(pi1,pi2))
                 .build();
         promotionContainer.put(p1.getPromoId(),p1);
@@ -108,7 +108,7 @@ class PromoRuleServiceImplTest {
     void applyPromo_ScenarioC() {
         List<Item> cartLineItems = prepareTestDataForScenario3();
         Double actualValue = promoRuleService.applyPromo(cartLineItems);
-        Assertions.assertEquals(370,actualValue);
+        Assertions.assertEquals(280,actualValue);
     }
 
     private List<Item> prepareTestDataForScenario3() {

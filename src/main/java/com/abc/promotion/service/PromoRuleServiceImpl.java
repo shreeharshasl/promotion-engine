@@ -2,6 +2,7 @@ package com.abc.promotion.service;
 
 import com.abc.promotion.constants.PromoTypeConstants;
 import com.abc.promotion.domain.Item;
+import com.abc.promotion.domain.PromoItem;
 import com.abc.promotion.domain.Promotion;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -45,6 +47,32 @@ public class PromoRuleServiceImpl implements PromoRuleService{
 
     private Double applyMixedTypePromo(Promotion promotion, List<Item> cartLineItems) {
         Double amount = 0.0;
+        List<PromoItem> promoItems = promotion.getPromoItemList();
+        while(true){
+            boolean allPresent = true;
+            for(PromoItem promoItem: promoItems){
+
+                Optional<Item> itemFound = cartLineItems.stream().filter(item->
+                {
+                    boolean b = item.getSkuId().equalsIgnoreCase(promoItem.getSkuId())
+                            && promoItem.getCount() <= item.getQty();return b;
+
+                }).findAny();
+                if(itemFound.isEmpty())allPresent=false;
+                if(!allPresent)break;
+            }
+            if(!allPresent)break;
+            else {
+                amount+=promotion.getPromoAmount();
+                for(PromoItem promoItem: promoItems){
+
+                    for (Item item: cartLineItems) {
+                        if(item.getSkuId().equalsIgnoreCase(promoItem.getSkuId()))
+                            item.setQty(item.getQty()-promoItem.getCount());
+                    }
+                }
+            }
+        }
 
         return amount;
     }
