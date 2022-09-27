@@ -61,3 +61,29 @@ Promo
                     }
                 ]
             }
+
+    Endpoint: http://localhost:8080/promo-rule
+    HTTP METHOD: POST
+    REQUEST SAMPLE:
+        [
+    {
+        "skuId":"A",
+        "unitPrice":50.0,
+        "qty":3
+    },
+    {
+        "skuId":"B",
+        "unitPrice":30.0,
+        "qty":5
+    },
+    {
+        "skuId":"C",
+        "unitPrice":20.0,
+        "qty":1
+    },
+    {
+        "skuId":"D",
+        "unitPrice":15.0,
+        "qty":1
+    }
+]
